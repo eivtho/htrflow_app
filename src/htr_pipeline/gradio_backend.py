@@ -23,7 +23,7 @@ class SingletonModelLoader:
 
     def __init__(self):
         if not hasattr(self, "inferencer"):
-            self.inferencer = Inferencer(local_run=True)
+            self.inferencer = Inferencer.from_htr_models(local_run=True)
         if not hasattr(self, "pipeline"):
             self.pipeline = Pipeline(self.inferencer)
 

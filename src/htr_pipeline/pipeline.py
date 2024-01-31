@@ -77,5 +77,5 @@ class PipelineInterface(Protocol):
 
 
 if __name__ == "__main__":
-    prediction_model = Inferencer()
+    prediction_model = Inferencer.from_htr_models()
     pipeline = Pipeline(prediction_model)

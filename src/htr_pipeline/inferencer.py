@@ -15,16 +15,22 @@ from src.htr_pipeline.utils.process_segmask import SegMaskHelper
 
 
 class Inferencer:
-    def __init__(self, local_run=False):
-        htr_models = HtrModels(local_run)
-        self.seg_model = htr_models.load_region_model()
-        self.line_model = htr_models.load_line_model()
-        self.htr_model_inferencer = htr_models.load_htr_model()
-
+    def __init__(self, seg_model, line_model, htr_model_inferencer):
+        self.seg_model = seg_model
+        self.line_model = line_model
+        self.htr_model_inferencer = htr_model_inferencer
         self.process_seg_mask = SegMaskHelper()
         self.postprocess_seg_mask = FilterSegMask()
         self.ordering = OrderObject()
         self.preprocess_img = Preprocess()
+
+    @classmethod
+    def from_htr_models(cls, local_run=False):
+        htr_models = HtrModels(local_run)
+        seg_model = htr_models.load_region_model()
+        line_model = htr_models.load_line_model()
+        htr_model_inferencer = htr_models.load_htr_model()
+        return cls(seg_model, line_model, htr_model_inferencer)
 
     @timer_func
     def predict_regions(self, input_image, pred_score_threshold=0.5, containments_threshold=0.5, visualize=True):
@@ -170,4 +176,4 @@ class InferencerInterface(Protocol):
 
 
 if __name__ == "__main__":
-    prediction_model = Inferencer()
+    prediction_model = Inferencer.from_htr_models()
